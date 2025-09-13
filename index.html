@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bundle & Save</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #fff;
+      padding: 20px;
+      display: flex;
+      justify-content: center;
+    }
+
+    .container {
+      max-width: 500px;
+      width: 100%;
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 20px;
+      color: #FF6B82;
+    }
+
+    .bundle {
+      border: 2px solid #ccc;
+      border-radius: 8px;
+      padding: 15px;
+      margin-bottom: 15px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      position: relative;
+    }
+
+    .bundle:hover {
+      border-color: #FF6B82;
+    }
+
+    .bundle.active {
+      border-color: #FF6B82;
+      background: #e9f9f4;
+    }
+
+    .bundle-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .bundle input {
+      margin-right: 10px;
+    }
+
+    .tag {
+      color: #FF6B82;
+      font-weight: bold;
+      font-size: 12px;
+      margin-left: 10px;
+    }
+
+    .discount {
+      font-weight: bold;
+      color: #FF6B82;
+    }
+
+    .options {
+      display: none;
+      margin-top: 15px;
+    }
+
+    .bundle.active .options {
+      display: block;
+    }
+
+    .options-row {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 10px;
+    }
+
+    select {
+      padding: 5px;
+      border: 1px solid #aaa;
+      border-radius: 4px;
+      width: 48%;
+    }
+
+    .summary {
+      text-align: center;
+      margin-top: 20px;
+    }
+
+    .summary p {
+      margin: 5px 0;
+    }
+
+    .btn {
+      margin-top: 10px;
+      width: 100%;
+      padding: 12px;
+      background: #FF6B82;
+      color: white;
+      font-size: 16px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .btn:hover {
+      background: #005c3a;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Bundle & Save</h2>
+
+    <div class="bundle">
+      <div class="bundle-header">
+        <label>
+          <input type="radio" name="bundle" value="195" data-pairs="1">
+          1 Pair <br><small>DKK 195.00</small>
+        </label>
+        <span class="discount">50% OFF</span>
+      </div>
+      <div class="options"></div>
+    </div>
+
+    <div class="bundle">
+      <div class="bundle-header">
+        <label>
+          <input type="radio" name="bundle" value="345" data-pairs="2">
+          2 Pair <br><small>DKK 345.00</small>
+        </label>
+        <span>
+          <span class="tag">Most Popular</span> 
+          <span class="discount">40% OFF</span>
+        </span>
+      </div>
+      <div class="options"></div>
+    </div>
+
+    <div class="bundle">
+      <div class="bundle-header">
+        <label>
+          <input type="radio" name="bundle" value="528" data-pairs="3">
+          3 Pair <br><small>DKK 528.00</small>
+        </label>
+        <span class="discount">60% OFF</span>
+      </div>
+      <div class="options"></div>
+    </div>
+
+    <div class="summary">
+      <p style="color: #FF6B82;">Free 2 Day Shipping</p>
+      <p>Total: <strong id="total">DKK 0.00</strong></p>
+      <button class="btn">+ Add to Cart</button>
+    </div>
+  </div>
+
+  <script>
+    const bundles = document.querySelectorAll('.bundle');
+    const radios = document.querySelectorAll('input[name="bundle"]');
+    const totalEl = document.getElementById('total');
+
+    radios.forEach(radio => {
+      radio.addEventListener('change', () => {
+        bundles.forEach(b => {
+          b.classList.remove('active');
+          b.querySelector('.options').innerHTML = ''; 
+        });
+
+        // add active to selected
+        const selectedBundle = radio.closest('.bundle');
+        selectedBundle.classList.add('active');
+
+        // generate dropdowns according to number of pairs
+        const count = radio.dataset.pairs;
+        const optionsDiv = selectedBundle.querySelector('.options');
+
+        for (let i = 1; i <= count; i++) {
+          const row = document.createElement('div');
+          row.classList.add('options-row');
+          row.innerHTML = `
+            <select>
+              <option>Size</option>
+              <option>S</option>
+              <option>M</option>
+              <option>L</option>
+            </select>
+            <select>
+              <option>Colour</option>
+              <option>Red</option>
+              <option>Blue</option>
+              <option>Green</option>
+              <option>Black</option>
+              <option>White</option>
+            </select>
+          `;
+          optionsDiv.appendChild(row);
+        }
+
+        // update total
+        totalEl.textContent = "DKK " + radio.value + ".00";
+      });
+    });
+  </script>
+</body>
+</html>
